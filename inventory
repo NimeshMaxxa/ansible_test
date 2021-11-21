@@ -1,1 +1,1 @@
-192.168.85.131
+192.168.85.131 httpd_package=httpd php_package=php 
