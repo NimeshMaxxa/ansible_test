@@ -1,0 +1,21 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+
+  - name: update repo
+    yum:
+      update_cache: yes
+
+
+  - name: add php support
+    yum:
+      name: epel-release
+      state: absent
+
+  - name: php install
+    yum:
+      name: php
+      state: absent
