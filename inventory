@@ -1,1 +1,6 @@
-192.168.85.131 httpd_package=httpd php_package=php 
+[web_servers]
+192.168.85.131
+
+[db_servers]
+192.168.85.132
+ 

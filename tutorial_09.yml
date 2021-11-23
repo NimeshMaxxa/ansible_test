@@ -1,0 +1,43 @@
+---
+ 
+ - hosts: db_servers
+   become: true
+   pre_tasks:
+   - name: install update
+     tags: always
+     yum:
+       update_only: yes
+       update_cache: yes
+
+
+   - name: install mariadb
+     tags: maria,centos
+     yum:
+       name: mariadb
+       state: latest
+     when: ansible_distribution == "CentOS"
+
+
+ - hosts: web_servers
+   become: true
+   tasks:
+
+   - name: install apache and php for Ubuntu servers
+     tags: apache,ubuntu
+     apt:
+       name:
+         - apache2
+         - libapache2-mod-php
+       state: latest
+       update_cache: yes
+     when: ansible_distribution == "Ubuntu"
+ 
+   - name: install apache and php for CentOS servers
+     tags: php
+     yum:
+       name:
+         - httpd
+         - php
+       state: latest
+       update_cache: yes
+     when: ansible_distribution == "CentOS"
