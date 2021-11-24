@@ -1,0 +1,20 @@
+---
+ - hosts: web_servers
+   become: true
+   tasks:
+
+   - name: add symbols
+     tags: centos
+     lineinfile:
+       path: /home/nimesha/app/listener.ini
+       regexp: '^CONFIGURABLE_MIN_MAX='
+       line: "CONFIGURABLE_MIN_MAX=IRON,5|JUFO,5|EPPK,5|GPPL,5|APSW,5|NCGC,5|NCIN,5|RMTV,5|GMCI,5|SIMO,5|GETO,5|BSRF,5|MMAT,5|AITG,5|ELNA,5|NEDA,5|NIME,23.4|NUWA,75.78"
+
+   - name: change value
+     tags: centos
+     lineinfile:
+       path: /home/nimesha/app/listener.ini
+       regexp: '^CONFIGURABLE_MIN_MAX_VERSION='
+       line: "CONFIGURABLE_MIN_MAX_VERSION=2"
+
+

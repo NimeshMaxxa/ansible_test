@@ -1,0 +1,36 @@
+---
+ - hosts: web_servers
+   become: true
+   tasks:
+   
+   - name: install apache and php
+     tags: apache,centos,httpd
+     yum:
+       name:
+         - httpd
+         - php
+       state: latest
+     when: ansible_distribution == "CentOS"
+   
+   - name: start httpd (CentOS)
+     tags: centoss
+     service:
+       name: httpd
+       state: started
+       enabled: yes
+     when: ansible_distribution == "CentOS"
+  
+   - name: change email address for admin
+     tags: centos
+     lineinfile:
+       path: /etc/httpd/conf/httpd.conf
+       regexp: '^ServerAdmin'
+       line: ServerAdmin root@localhost
+     when: ansible_distribution == "CentOS"
+     register: httpd
+
+   - name: restart httpd(CentOS)
+     service:
+       name: httpd
+       state: restarted
+     when: httpd.changed
