@@ -1,0 +1,40 @@
+---
+ - hosts: all
+   become: true
+   tasks:
+
+   - name: install updates (centos)
+     tags: centos
+     yum:
+       update_only: yes
+       update_cache: yes
+     when: ansible_distribution == "CentOS"
+
+ - hosts: all
+   become: true
+   tasks:
+
+   - name: create nuwan user
+     tags: always
+     user:
+       name: kumara
+       groups: root
+   - name: add ssh key for kumara
+     tags: always
+     authorized_key:
+       user: nuwan
+       key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE+/aD50dCTmsSHqN915JQsHnzx5B8m89xvaURfBGoWV ansible"
+
+   - name: add sudoers file for kumara
+     tags: always
+     copy:
+       src: sudoers_kumara
+       dest: /etc/sudoers.d/kumara
+       owner: root
+       group: root
+       mode: 0440
+
+
+
+
+ 
