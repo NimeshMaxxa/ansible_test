@@ -1,0 +1,12 @@
+---
+
+- name: calc service asia
+  hosts: web_servers
+  become: true
+  vars:
+   home_path: /home/nimesha/bamboo/
+ 
+  roles:
+   - role: calc-service-asia
+
+

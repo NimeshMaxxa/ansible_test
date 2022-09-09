@@ -1,0 +1,14 @@
+---
+
+- name: calc service asia
+  hosts: web_servers
+  become: true
+  vars:
+   home_path: /home/nimesha/app/calc_service/
+   rel_version: calc_service
+   _date: 2022-07-03
+
+  roles:
+   - role: calc-service-asia
+
+

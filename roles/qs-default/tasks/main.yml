@@ -1,0 +1,69 @@
+---
+# Author k.nimesha
+# default tasks file for direct quote server
+#   - name: download the release
+#     get_url:
+#      url: https://artifact.dfnplus.com/artifactory/Qoute_Server/{{rel_version}}.tgz
+#      dest: /usr/tmp/
+#      username: admin
+#      password: mdcadmin
+#      mode:  0777
+#      validate_certs: false
+
+   - name: uncompreess the tar file
+     unarchive: 
+      src: /usr/tmp/{{rel_version}}.tgz
+      dest: /usr/tmp
+      remote_src: yes
+
+   - name: create  backup directory
+     file:
+      path: "{{home_path}}deployment/{{_date}}"
+      state: directory
+  
+   - name: stop quote server
+     shell: ./bin/qs_kill.sh
+     args:
+      chdir: "{{ home_path }}"
+
+   - name: move existing config to backup folder
+     shell: mv bin config "{{home_path}}deployment/{{_date}}/"
+     args:
+      chdir: "{{ home_path }}"
+   - name: archive the backup directory
+     archive:
+      path: "{{home_path}}deployment/{{_date}}"
+      dest: "{{home_path}}deployment/{{_date}}.zip"
+      format: zip
+  
+   - name: delete backuped folder
+     file:
+      state: absent
+      path: "{{home_path}}deployment/{{_date}}/"
+
+   - name: copy  the new version
+     shell: cp -r  "/usr/tmp/{{rel_version}}/"* "{{home_path}}"
+  
+   - name: set file permission
+     shell: chmod  0755  "{{home_path}}bin/"*.sh
+     args:
+      chdir: "{{home_path}}"
+      warn: false
+   
+   - name: delete downloaded version
+     file:
+      path: "/usr/tmp/{{rel_version}}"
+      state: absent
+
+   - name: update quote server
+     shell: ./bin/update.sh
+     args:
+      chdir: "{{ home_path }}"
+      
+   - name: delete logs
+     shell: rm -rf *
+     args:
+      chdir: "{{ home_path }}logs"
+
+
+

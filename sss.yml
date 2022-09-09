@@ -1,0 +1,14 @@
+---
+
+- name: calc service asia
+  hosts: web_servers
+  become: true
+  vars:
+   home_path: /home/nimesha/app/search_services/
+   rel_version: direct.qouteserver
+   _date: 2022-08-12
+
+  roles:
+   - role: sss
+
+

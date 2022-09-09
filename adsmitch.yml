@@ -1,0 +1,14 @@
+---
+
+- name: calc service asia
+  hosts: web_servers
+  become: true
+  vars:
+   home_path: /home/nimesha/app/adsm/
+   rel_version: a872278c566172fd73ccfbfad6ac3bac9e0d9f92
+   _date: 2022-06-13
+
+  roles:
+   - role: adsm-itch
+
+

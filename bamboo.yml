@@ -1,0 +1,72 @@
+---
+ - hosts: web_servers
+   become: true
+   tasks:
+   
+   - name: change URL
+     tags: centos
+     replace:
+       path: /home/nimesha/bamboo/connections.yml
+       regexp: 'url: "https://searchservice.feedgma.com/"'
+       replace: 'url: "https://searchservice-qa.feedgma.com/"'
+
+   - name: change db driver
+     replace:
+       path: /home/nimesha/bamboo/connections.yml
+       regexp: 'driver-class-name: oracle.jdbc.OracleDriver'
+       replace: 'driver-class-name: org.postgresql.Driver'
+
+   - name: change dialect
+     replace:
+       path: /home/nimesha/bamboo/connections.yml
+       regexp: 'dialect: org.hibernate.dialect.Oracle10gDialect'
+       replace: 'dialect: org.hibernate.dialect.PostgreSQL10Dialect'
+
+   - name: change username
+     replace:
+       path: /home/nimesha/bamboo/connections.yml
+       regexp: 'username: DFN_HISTORY'
+       replace: 'username: mubasher'
+
+   - name: change username dfnmarket
+     replace:
+       path: /home/nimesha/bamboo/connections.yml
+       regexp: 'username: DFN_MARKET_DATA'
+       replace: 'username: mubasher'
+
+   - name: change password
+     replace:
+       path: /home/nimesha/bamboo/connections.yml
+       regexp: 'password: B1cFsaDb'
+       replace: 'password: password'
+
+   - name: change jdbc url history pricedb-ro url
+     replace:
+       path: /home/nimesha/bamboo/connections.yml
+       after: 'schema: DFN_HISTORY'
+       before: 'schema: DFN_MARKET_DATA'
+       regexp: 'jdbc-url: jdbc:oracle:thin:@pricedb-ro:1521/LDCUAT'
+       replace: 'jdbc-url: jdbc:postgresql://pricedb:5444/dfnmkt?currentSchema=DFN_HISTORY'
+
+
+   - name: change DFNMARKET jdbc url
+     replace:
+       path: /home/nimesha/bamboo/connections.yml
+       after: 'schema: DFN_MARKET_DATA'
+       regexp: 'jdbc-url: jdbc:oracle:thin:@pricedb-ro:1521/LDCUAT'
+       replace: 'jdbc-url: jdbc:postgresql://pricedb:5444/dfnmkt?currentSchema=DFN_MARKET_DATA'
+
+   - name: change history pricedb  jdbc url
+     replace:
+       path: /home/nimesha/bamboo/connections.yml
+       regexp: 'jdbc-url: jdbc:oracle:thin:@pricedb:1521/LDCUAT'
+       replace: 'jdbc-url: jdbc:postgresql://pricedb:5444/dfnmkt?currentSchema=DFN_HISTORY'
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,52 @@
+---
+# Author w.shehan
+# tasks file for ADSM-ITCH
+   - name: download the release
+     get_url:
+      url: https://artifact.dfnplus.com/artifactory/ADSM-ITCH/{{rel_version}}.tgz 
+      dest: /usr/tmp/
+      username: admin
+      password: mdcadmin
+      mode:  0777
+      validate_certs: false
+
+   - name: uncompreess the tar file
+     unarchive: 
+      src: /usr/tmp/{{rel_version}}.tgz
+      dest: /usr/tmp
+      remote_src: yes
+
+   - name: create  backup directory
+     file:
+      path: "{{home_path}}deployment/{{_date}}"
+      state: directory
+  
+   - name: stop adsm-itch analyzer
+     shell: ./kill.sh
+     args:
+      chdir: "{{home_path}}"
+
+   - name: move existing files to backup folder
+     shell: mv  analyzer.sh config "{{home_path}}deployment/{{_date}}/"
+     args:
+      chdir: "{{home_path}}"
+
+   - name: archive the backup directory
+     archive:
+      path: "{{home_path}}deployment/{{_date}}"
+      dest: "{{home_path}}deployment/{{_date}}.zip"
+      format: zip
+
+   - name: copy  the new version
+     shell: cp -r  /usr/tmp/{{rel_version}}/* "{{home_path}}"
+  
+   - name: set file permission
+     file:
+      path: "{{home_path}}/start.sh"
+      mode: '0755'
+   
+   - name: delete downloaded version
+     file:
+      path: /usr/tmp/{{rel_version}}
+      state: absent
+

@@ -1,0 +1,64 @@
+---
+# Author k.nimesha
+# tasks file for calculation service asia changes
+   
+- name: change db driver to postgresql
+  replace:
+    path: "{{home_path}}config/connections.yaml"
+    regexp: 'driver-class-name: oracle.jdbc.OracleDriver'
+    replace: 'driver-class-name: org.postgresql.Driver'
+    
+- name: change dialect to postgresql
+  replace:
+    path: "{{home_path}}config/connections.yaml"
+    regexp: 'dialect: org.hibernate.dialect.Oracle10gDialect'
+    replace: 'dialect: org.hibernate.dialect.PostgreSQL10Dialect'
+
+- name: change username dfn_history
+  replace:
+    path: "{{home_path}}config/connections.yaml"
+    regexp: 'username: DFN_HISTORY'
+    replace: 'username: mubasher'
+
+- name: change username dfn_market_data
+  replace:
+    path: "{{home_path}}config/connections.yaml"
+    regexp: 'username: DFN_MARKET_DATA'
+    replace: 'username: mubasher'
+
+- name: change password
+  replace:
+    path: "{{home_path}}config/connections.yaml"
+    regexp: 'password: B1cFsaDb'
+    replace: 'password: password'
+
+- name: change jdbc url history pricedb-ro 
+  replace:
+    path: "{{home_path}}config/connections.yaml"
+    after: 'schema: DFN_HISTORY'
+    before: 'schema: DFN_MARKET_DATA'
+    regexp: 'jdbc-url: jdbc:oracle:thin:@pricedb-ro:1521/LDCUAT'
+    replace: 'jdbc-url: jdbc:postgresql://pricedb:5444/dfnmkt?currentSchema=DFN_HISTORY'
+
+- name: change dfn_market_data jdbc url
+  replace:
+    path: "{{home_path}}config/connections.yaml"
+    after: 'schema: DFN_MARKET_DATA'
+    regexp: 'jdbc-url: jdbc:oracle:thin:@pricedb-ro:1521/LDCUAT'
+    replace: 'jdbc-url: jdbc:postgresql://pricedb:5444/dfnmkt?currentSchema=DFN_MARKET_DATA'
+
+- name: change dfn_history pricedb  jdbc url
+  replace:
+    path: "{{home_path}}config/connections.yaml"
+    regexp: 'jdbc-url: jdbc:oracle:thin:@pricedb:1521/LDCUAT'
+    replace: 'jdbc-url: jdbc:postgresql://pricedb:5444/dfnmkt?currentSchema=DFN_HISTORY'
+    
+- name: restart the calculation service
+  shell: ./kill.sh & ./run.sh
+  args:
+   chdir: "{{home_path}}"
+   warn: false
+
+
+
+

@@ -1,0 +1,16 @@
+---
+# Author k.nimesha
+# tasks file for search service uat
+
+- name: change the opa ip address
+  replace:
+   path: "{{home_path}}config/auth.yml"
+   regexp: '172.20.216.25'
+   replace: '127.0.0.1'
+   
+- name: change auth url according to environment
+  replace:
+   path: "{{home_path}}config/auth.yml"
+   regexp: 'https://auth-qa.feedgma.com/'
+   replace: 'https://auth-uat.feedgma.com/'
+

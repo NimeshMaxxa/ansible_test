@@ -1,0 +1,27 @@
+---
+ - hosts: web_servers
+   become: true
+   tasks:
+
+   - name: add user
+     tags: centos
+     ansible.builtin.user:
+       name: dilini
+       comment: dilini_lakshila
+       uid: 1055
+       password: $1$lXdlYRCY$eEuQpkSLSvBvDgIeV1ffN.
+       createhome: yes
+       home: /home/dilini
+
+   - name: set acl
+     shell: setfacl -m u:dilini:rx /home/nimesha
+
+
+   - name: set home path
+     lineinfile:
+       path: /home/dilini/.bash_profile
+       line: "cd /home/nimesha/app"
+       state: present
+       backup: yes
+     register: outputt
+     

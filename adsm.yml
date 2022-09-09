@@ -1,0 +1,15 @@
+---
+ - hosts: web_servers
+   become: true
+   tasks:
+   
+   - name: adsm itch deployment
+     vars:
+      rel_version: "a872278c566172fd73ccfbfad6ac3bac9e0d9f92"
+      _date: "2022-06-13"
+      home_path: /home/nimesha/app/adsm/
+
+     
+     roles:
+      - role: adsm-itch
+  
